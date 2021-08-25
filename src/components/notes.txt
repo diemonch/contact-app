@@ -1,0 +1,2 @@
+Components is a collectiomn of resuable items
+JSX - java sctipt extension for HTML since HTML cant be used inside JS
