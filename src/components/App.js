@@ -15,8 +15,10 @@ import { set } from 'harmony-reflect';
 function App() {
       const LOCAL_STORAGE_KEY='contacts';
       const [contacts, setContacts] = useState([]);
+      const [searchTerm, setSearchTerm] = useState("");
+      const [searchResult, setSearchResult] = useState([]);
       
-
+     
       const addContactHandler= async (contact)=> {
         const request = {
           id:uuid(),
@@ -54,6 +56,20 @@ function App() {
         //console.log(contact);
       };
       
+     
+      const searchHandler = (searchTerm)=>{
+        // console.log(searchTerm);
+        setSearchTerm(searchTerm);  
+        if (searchTerm !== "") {
+          const newContctList = contacts.filter((contact) => {
+           return Object.values(contact).join("").toLowerCase().includes(searchTerm.toLowerCase());
+          });
+          setSearchResult(newContctList);
+        } else {
+          setSearchResult(contacts);
+        }
+    };
+     
       useEffect (()=> {
         //localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(contacts));
         // const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -84,9 +100,14 @@ function App() {
      <Switch>
      <Route 
       path="/"
-      exact 
+      exact
       render = {(props) => (
-      <ContactList {...props} contacts={contacts} getContactId={removeContactHandler} />
+      <ContactList {...props} 
+      contacts={searchTerm.length <1 ? contacts :searchResult} 
+      getContactId={removeContactHandler} 
+      term={searchTerm}
+      searchKeyword={searchHandler}
+      />
    
       ) } />
   
